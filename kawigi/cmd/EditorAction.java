@@ -228,8 +228,54 @@ public class EditorAction extends DefaultAction
 					line = (text.indexOf('\n', ind+1) < 0) ? text.substring(ind+1) : text.substring(ind+1, text.indexOf('\n', ind+1));
 					indentation = (line.trim().length() == 0) ? line : line.substring(0, Math.min(line.indexOf(line.trim()), context.getCaretPosition()-1-ind));
 				}
-				indentation = "\n" + indentation;
+				
+				String parentIndentation = indentation;
+				
+				/*
+				 * Patch by xeronix: Improving indentation related to opening braces ('{') and adding auto completion of closing braces ('}').
+				 * TODO : Full Auto Complete Feature.
+				 * If last character before '\n' is '{' then indentation will also add a '\t' (tab)
+				 * along with '}' (closing braces) on next line.
+				 */
+				int pos=context.getCaretPosition();
+				int eolCount = 0;
+				
+				while (pos >= 0 && text.charAt(pos) <= ' ') {
+				    eolCount++;
+				    pos--;
+				}
+				
+				int postSmartIndentCaretBackShift = 0;
+				
+				// (eolCount == 1) makes sure, Smart Indent is done only for indentation after first end of line following '{'
+				if (eolCount == 1 && pos >= 0 && text.charAt(pos) == '{') {
+				    indentation = "\n" + indentation + "\t";
+				            
+				    /*
+				     * if '}' has already been added then do not add a new one. This is to counter the case when
+				     * '\n' is entered again by moving the caret after '{'. 
+				     */
+				    for (pos = context.getCaretPosition(); pos < text.length() && text.charAt(pos) <= ' '; pos++);
+				    
+				    if (text.charAt(pos) == '}') {
+				        int bracesIndentationLength = 0;
+				        
+				        for (pos--; pos >= 0 && text.charAt(pos) != '\n'; pos--) {
+				            bracesIndentationLength++;
+				        }
+				        
+				        if (bracesIndentationLength < parentIndentation.length()) {
+				            indentation += ("\n" + parentIndentation + '}');
+				            postSmartIndentCaretBackShift = parentIndentation.length() + 2;
+				        }
+				    }
+				} else {
+				    indentation = "\n" + indentation;
+				}
+				
 				context.replaceSelection(indentation);
+				context.setCaretPosition(context.getCaretPosition()-postSmartIndentCaretBackShift);
+				
 				break;
 			}
 			case actCtxMenu:
