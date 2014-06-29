@@ -257,18 +257,17 @@ public class EditorAction extends DefaultAction
 				     */
 				    for (pos = context.getCaretPosition(); pos < text.length() && text.charAt(pos) <= ' '; pos++);
 				    
-				    if (text.charAt(pos) == '}') {
-				        int bracesIndentationLength = 0;
+				    char nextValidChar = text.charAt(pos);
+			        int nextIndentationLength = 0;
 				        
-				        for (pos--; pos >= 0 && text.charAt(pos) != '\n'; pos--) {
-				            bracesIndentationLength++;
-				        }
+			        for (pos--; pos >= 0 && text.charAt(pos) != '\n'; pos--) {
+			            nextIndentationLength++;
+			        }
 				        
-				        if (bracesIndentationLength < parentIndentation.length()) {
-				            indentation += ("\n" + parentIndentation + '}');
-				            postSmartIndentCaretBackShift = parentIndentation.length() + 2;
-				        }
-				    }
+			        if (nextValidChar != '}' || nextIndentationLength < parentIndentation.length()) {
+			            indentation += ("\n" + parentIndentation + '}');
+			            postSmartIndentCaretBackShift = parentIndentation.length() + 2;
+			        }
 				} else {
 				    indentation = "\n" + indentation;
 				}
