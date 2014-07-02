@@ -264,7 +264,7 @@ public class EditorAction extends DefaultAction
 			            nextIndentationLength++;
 			        }
 				        
-			        if (nextValidChar != '}' || nextIndentationLength < parentIndentation.length()) {
+			        if ((nextValidChar != '}' && nextIndentationLength == parentIndentation.length()) || nextIndentationLength < parentIndentation.length()) {
 			            indentation += ("\n" + parentIndentation + '}');
 			            postSmartIndentCaretBackShift = parentIndentation.length() + 2;
 			        }
