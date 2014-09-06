@@ -44,7 +44,7 @@ public final class PluginOutsideFrame extends JFrame implements WindowListener, 
 			KawigiEdit.getMainPanel().addHierarchyListener(this);
 		}
 		else {
-			KawigiEdit.setOutsideMode(false);
+			KawigiEdit.setOutsideMode(true);
 		}
 	}
 

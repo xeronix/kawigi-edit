@@ -312,7 +312,7 @@ public class KawigiEdit
     /**
      * Flag showing if out-of-the-arena mode is turned on or off
      */
-    private boolean outsideMode = false;
+    private boolean outsideMode = true;
     /**
      * Instance of plugin created by Arena
      */
