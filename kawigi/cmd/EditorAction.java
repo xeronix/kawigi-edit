@@ -228,15 +228,14 @@ public class EditorAction extends DefaultAction
 					line = (text.indexOf('\n', ind+1) < 0) ? text.substring(ind+1) : text.substring(ind+1, text.indexOf('\n', ind+1));
 					indentation = (line.trim().length() == 0) ? line : line.substring(0, Math.min(line.indexOf(line.trim()), context.getCaretPosition()-1-ind));
 				}
-				
-				String parentIndentation = indentation;
-				
+								
 				/*
-				 * Patch by xeronix: Improving indentation related to opening braces ('{') and adding auto completion of closing braces ('}').
-				 * TODO : Full Auto Complete Feature.
+				 * Improving indentation related to opening braces ('{') and adding auto completion of closing braces ('}').
 				 * If last character before '\n' is '{' then indentation will also add a '\t' (tab)
 				 * along with '}' (closing braces) on next line.
 				 */
+                String parentIndentation = indentation;
+              
 				int pos=context.getCaretPosition();
 				int eolCount = 0;
 				
